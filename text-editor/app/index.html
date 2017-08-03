@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Simple text editor v0.1!</title>
+    <link rel="stylesheet" href="libs/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body id="main">
+
+
+    <section id="tab-selector" class="noselect">
+      <div class="tabs-row">
+        <ul id="tabs">
+          <li>
+            <div class="tab-box">
+              <i class="fa fa-file-o" aria-hidden="true"></i>
+              <span>style.css</span>
+              <i class="btn-close fa fa-times-circle" aria-hidden="true"></i>
+            </div>
+          </li>
+          <li>
+            <div class="tab-box">
+              <i class="fa fa-file-o" aria-hidden="true"></i>
+              <span>style.css</span>
+              <i class="btn-close fa fa-times-circle" aria-hidden="true"></i>
+            </div>
+          </li>
+          <li>
+            <div class="tab-box">
+              <i class="fa fa-file-o" aria-hidden="true"></i>
+              <span>style.css</span>
+              <i class="btn-close fa fa-times-circle" aria-hidden="true"></i>
+            </div>
+          </li>
+          <li>
+            <div class="tab-box">
+              <i class="fa fa-file-o" aria-hidden="true"></i>
+              <span>style.css</span>
+              <i class="btn-close fa fa-times-circle" aria-hidden="true"></i>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="arrow-box">
+        <i class="btn-arrow disabled fa fa-chevron-left" aria-hidden="true" data-command="tab-left"></i>
+        <i class="btn-arrow fa fa-chevron-right" aria-hidden="true" data-command="tab-right"></i>
+      </div>
+    </section>
+
+    <section id="editor">
+<!--       <ul id="line-counter" class="monofont">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>75</li>
+      </ul>
+      <textarea id="text-body" class="monofont"></textarea>
+ -->    </section>
+
+    <section id="status-bar" class="noselect">
+        <span id="info-position">Ln 33, Col 23</span>
+        <span id="info-spaces">Spaces: 2</span>
+        <span id="info-encoding">UTF-8</span>
+        <span id="info-ending">LF</span>
+    </section>
+
+
+    <!-- [Beginning] Fixes problem with script imports  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+    <script src="libs/jquery-3.2.1.min.js"></script>
+    <script src="style.js"></script>
+    <script src="behavior.js"></script>
+
+    <!-- [End] Fixes problem with script imports  -->
+    <script>if (window.module) module = window.module;</script>
+  </body>
+</html>

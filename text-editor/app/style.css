@@ -1,0 +1,151 @@
+body{
+    padding: 0;
+    margin: 0;
+    background: red;
+    font-family: sans-serif;
+    cursor: default;
+}
+ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+}
+
+#tab-selector{
+    padding: 0;
+    height: 32px;
+    border-bottom: 1px solid #000;
+    background-color: #555;
+}
+#tab-selector .arrow-box{
+    float: right;
+    width: auto;
+    height: 100%;
+    cursor: pointer;
+    padding: 0px 5px;
+}
+#tab-selector .arrow-box > .btn-arrow {
+    font-size: 18px;
+    line-height: 32px;
+    color: #222;
+}
+#tab-selector .arrow-box > .btn-arrow.disabled{
+    color: #444444;
+}
+#tab-selector .tabs-row{
+    float: left;
+    width: calc(100% - 45px);
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+    position: relative;
+}
+#tabs{
+    display: block;
+    width: auto;
+    height: 26px;
+    margin-top: 6px;
+    background-color: blue;
+}
+#tabs > li{
+    display: inline-block;
+}
+#tabs .tab-box{
+    padding: 4px 10px;
+    background-color: green;
+    cursor: pointer;
+}
+#tabs .tab-box > span{
+    display: inline-block;
+    font-size: 14px;
+    padding-right: 20px;
+}
+#tabs .tab-box .btn-close{
+    cursor: pointer;
+}
+#tabs .tab-box .btn-close:hover{
+    color: #96281b;
+}
+
+
+#editor{
+    padding: 0;
+    background-color: #444444;
+}
+
+#status-bar{
+    border-top: 1px solid #000;
+    padding: 4px 15px 4px 15px;
+    background-color: #c5c5c5;
+    text-align: right;
+}
+#status-bar > span{
+    line-height: 1;
+    font-size: 13px;
+    color: #333;
+}
+#info-spaces, #info-encoding, #info-ending{
+    margin-left: 14px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+ul#line-counter{
+    list-style-type: none;
+    margin: 0;
+    border: none;
+    padding: 0 18px 0 12px;
+    display: block;
+    float: left;
+    min-width: 20px;
+    max-width: 50px;
+    background-color: #333;
+    height: 100%;
+    line-height: 1;
+    font-family: monospace;
+}
+ul#line-counter > li{
+    width: 100%;
+    color: #aaa;
+    text-align: right;
+}
+#text-body{
+    display: block;
+    margin: 0;
+    border: none;
+    outline: none;
+    resize: none;
+    float: right;
+    width: auto;
+    padding: 0;
+    background-color: transparent;
+    color: #c5c5c5;
+    height: 100%;
+}
+
+.monofont{
+    line-height: 1;
+    font-family: monospace;
+    font-size: 16px;
+}
+
+
+
+

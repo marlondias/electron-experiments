@@ -1,0 +1,18 @@
+{
+  "name": "simple-text",
+  "version": "0.1.0",
+  "description": "A simple text editor made in Javascript/Electron.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "text",
+    "editor"
+  ],
+  "author": "Marlon Dias",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^1.6.11"
+  }
+}
