@@ -32,17 +32,20 @@ ul{
     cursor: pointer;
     padding: 0px 5px;
 }
-#tab-selector .arrow-box > .btn-arrow {
+#tab-selector .arrow-box.left{
+    float: left;
+}
+#tab-selector .arrow-box > .btn-tab {
     font-size: 18px;
     line-height: 32px;
     color: #222;
 }
-#tab-selector .arrow-box > .btn-arrow.disabled{
+#tab-selector .arrow-box > .btn-tab.disabled{
     color: #444444;
 }
 #tab-selector .tabs-row{
     float: left;
-    width: calc(100% - 45px);
+    width: calc(100% - 45px - 26px);
     height: 100%;
     padding: 0;
     overflow: auto;
@@ -54,6 +57,7 @@ ul{
     height: 26px;
     margin-top: 6px;
     background-color: blue;
+    background-color: transparent;
 }
 #tabs > li{
     display: inline-block;
@@ -62,17 +66,28 @@ ul{
     padding: 4px 10px;
     background-color: green;
     cursor: pointer;
+    margin: 0 2px;
+}
+#tabs .tab-box{
+    color: #222;
+    background-color: #747474;
+}
+#tabs .tab-box.active{
+    color: #ddd;
+    background-color: #363636;
 }
 #tabs .tab-box > span{
     display: inline-block;
     font-size: 14px;
+    padding-left: 5px;
     padding-right: 20px;
 }
 #tabs .tab-box .btn-close{
     cursor: pointer;
+    opacity: 0.6;
 }
 #tabs .tab-box .btn-close:hover{
-    color: #96281b;
+    opacity: 1;
 }
 
 
