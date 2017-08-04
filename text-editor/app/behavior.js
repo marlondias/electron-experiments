@@ -19,14 +19,16 @@ class Document{
     }
 }
 
+
 const tabs = document.getElementById('tabs');
-const docs = []; //tab position follows array index
+let tabid = 1;
+const tabElements = []; //tab position follows array index
 
 function createTab(newName, newTarget){
     const nameLimit = 20;
 
     const tab = document.createElement('li');
-    tab.className = 'tab-box';
+    tab.className = 'tab-box opening';
     if(newName != undefined && newName != '') tab.setAttribute('title', newName);
     tab.addEventListener('click', () => {
         //chama o editor relacionado
@@ -49,7 +51,7 @@ function createTab(newName, newTarget){
     tab.appendChild(icon);
 
     const name = document.createElement('span');
-    if(newName == undefined || newName == '') name.innerText = "(untitled)";
+    if(newName == undefined || newName == '') name.innerText = '(untitled)';
     else if(newName.length <= nameLimit) name.innerText = newName;
     else{
         name.innerText = newName.substring(0, nameLimit-3) + '...';
@@ -63,21 +65,61 @@ function createTab(newName, newTarget){
         ev.stopPropagation();
         //start closing process
         console.log('Why do you want to kill me?');
+
+        destroyTab(tab);
     });
     tab.appendChild(close);
 
-    tabs.appendChild(tab);    
-    docs.push(newTarget);
+    if(tabElements.length == 0) tabs.appendChild(tab);
+    else {
+        tabs.insertBefore(tab, tabElements[0]);
+    }
+    tabElements.unshift(tab);
+
+    const twidth = $(tab).outerWidth();
+    const theight = $(tab).outerHeight();
+
+
+    tab.addEventListener('webkitAnimationEnd', function callback(){
+        setActiveTab(tab);
+        tab.removeEventListener('webkitAnimationEnd', callback);
+    });
+    tab.style.WebkitAnimation = 'openingtab 0.3s 1';
+
+    
+
+
+
 }
+
+function destroyTab(element){
+    //No need to remove listeners, because the element will die
+    element.addEventListener("webkitAnimationStart", () => {
+        console.log('Destroy começou..');
+    });
+    element.addEventListener("webkitAnimationEnd", () => {
+        console.log('Destroy terminou.');
+        let index = tabElements.indexOf(element);
+        tabElements.splice(index, 1);
+        element.parentNode.removeChild(element);
+    });
+    element.style.WebkitAnimation = 'closingtab 0.5s 1';
+}
+
+function setActiveTab(element){
+    $(element).addClass('active');
+    console.log('Active tab has changed!');
+}
+
 
 //Bind events here...
 document.getElementById('btn-tabs-add').addEventListener('click', () => {
-    createTab("sample file.txt");
+    createTab(`sample${tabid++}.txt`);
     console.log('ADD TAB was clicked.');
 });
 
 document.getElementById('btn-tabs-left').addEventListener('click', () => {
-    console.log('TAB LEFT was clicked.');    
+    console.log('TAB LEFT was clicked.');
 });
 
 document.getElementById('btn-tabs-right').addEventListener('click', () => {

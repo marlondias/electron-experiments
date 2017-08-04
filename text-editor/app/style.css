@@ -1,7 +1,7 @@
 body{
     padding: 0;
     margin: 0;
-    background: red;
+    background: #000;
     font-family: sans-serif;
     cursor: default;
 }
@@ -49,24 +49,24 @@ ul{
     height: 100%;
     padding: 0;
     overflow: auto;
-    position: relative;
+    background-color: red;
 }
 #tabs{
     display: block;
+    position: relative;
     width: auto;
     height: 26px;
     margin-top: 6px;
     background-color: blue;
-    background-color: transparent;
-}
-#tabs > li{
-    display: inline-block;
 }
 #tabs .tab-box{
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
     padding: 4px 10px;
     background-color: green;
     cursor: pointer;
-    margin: 0 2px;
 }
 #tabs .tab-box{
     color: #222;
@@ -89,11 +89,23 @@ ul{
 #tabs .tab-box .btn-close:hover{
     opacity: 1;
 }
-
-
-#editor{
-    padding: 0;
-    background-color: #444444;
+@-webkit-keyframes openingtab {
+    from {
+        opacity: 0.5;
+        top: 28px;
+    }
+    to {
+        opacity: 1;
+        top: 0px;
+    }
+}
+@-webkit-keyframes closingtab {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }
 
 #status-bar{
@@ -108,7 +120,7 @@ ul{
     color: #333;
 }
 #info-spaces, #info-encoding, #info-ending{
-    margin-left: 14px;
+    margin-left: 10px;
 }
 
 
@@ -120,6 +132,10 @@ ul{
 
 
 
+#editor{
+    padding: 0;
+    background-color: #444444;
+}
 
 
 ul#line-counter{
