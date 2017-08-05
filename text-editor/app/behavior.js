@@ -28,7 +28,7 @@ function createTab(newName, newTarget){
     const nameLimit = 20;
 
     const tab = document.createElement('li');
-    tab.className = 'tab-box opening';
+    tab.className = 'tab-box';
     if(newName != undefined && newName != '') tab.setAttribute('title', newName);
     tab.addEventListener('click', () => {
         //chama o editor relacionado
@@ -70,18 +70,25 @@ function createTab(newName, newTarget){
     });
     tab.appendChild(close);
 
+    //Adds the new tab to the array and to the <ul>
     if(tabElements.length == 0) tabs.appendChild(tab);
     else {
         tabs.insertBefore(tab, tabElements[0]);
     }
     tabElements.unshift(tab);
 
-    const twidth = $(tab).outerWidth();
-    const theight = $(tab).outerHeight();
 
+    //Recalculate <ul> width, if needed
+    const tWidth = $(tab).outerWidth();
+    let newFullWidth = $(tabs).outerWidth();
+    if(newFullWidth)
 
-    tab.addEventListener('webkitAnimationEnd', function callback(){
+    tab.addEventListener('webkitAnimationStart', function callback(){
         setActiveTab(tab);
+        tab.removeEventListener('webkitAnimationStart', callback);
+    });
+    tab.addEventListener('webkitAnimationEnd', function callback(){
+        tab.style.WebkitAnimation = '';
         tab.removeEventListener('webkitAnimationEnd', callback);
     });
     tab.style.WebkitAnimation = 'openingtab 0.3s 1';
@@ -93,20 +100,24 @@ function createTab(newName, newTarget){
 }
 
 function destroyTab(element){
-    //No need to remove listeners, because the element will die
-    element.addEventListener("webkitAnimationStart", () => {
-        console.log('Destroy começou..');
-    });
+    //No need to remove listeners because the element will die
+    element.addEventListener("webkitAnimationStart", () => {});
     element.addEventListener("webkitAnimationEnd", () => {
-        console.log('Destroy terminou.');
-        let index = tabElements.indexOf(element);
-        tabElements.splice(index, 1);
-        element.parentNode.removeChild(element);
+        try{
+            element.parentNode.removeChild(element);
+            tabElements.splice(tabElements.indexOf(element), 1);
+        } catch(ex){
+            console.error('Error while removing <li> node.');
+        }
     });
     element.style.WebkitAnimation = 'closingtab 0.5s 1';
 }
 
 function setActiveTab(element){
+    //Add class 'active' to this element only
+    for(let t of tabElements){
+        $(t).removeClass('active');
+    }
     $(element).addClass('active');
     console.log('Active tab has changed!');
 }
