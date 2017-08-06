@@ -43,17 +43,16 @@ ul{
 #tab-selector .arrow-box > .btn-tab.disabled{
     color: #444444;
 }
-#tab-selector .tabs-row{
+#tabs-row{
     float: left;
     width: calc(100% - 45px - 26px);
     height: 100%;
     padding: 0;
-    overflow: auto;
-    background-color: red;
+    overflow: hidden;
 }
 #tabs{
-    display: block;
     position: relative;
+    left: 0;
     width: auto;
     height: 26px;
     margin-top: 6px;
@@ -65,12 +64,12 @@ ul{
     top: 0;
     left: 0;
     padding: 4px 10px;
-    background-color: green;
-    cursor: pointer;
-}
-#tabs .tab-box{
     color: #222;
     background-color: #747474;
+    cursor: pointer;
+}
+#tabs .tab-box:hover{
+    background-color: #666666;
 }
 #tabs .tab-box.active{
     color: #ddd;
