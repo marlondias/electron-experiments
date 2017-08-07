@@ -1,3 +1,6 @@
+*{
+    box-sizing: border-box;
+}
 body{
     padding: 0;
     margin: 0;
@@ -107,6 +110,8 @@ ul{
     }
 }
 
+
+
 #status-bar{
     border-top: 1px solid #000;
     padding: 4px 15px 4px 15px;
@@ -124,58 +129,40 @@ ul{
 
 
 
-
-
-
-
-
-
-
-#editor{
+#editor-box{
     padding: 0;
-    background-color: #444444;
+    overflow: hidden;
 }
-
-
-ul#line-counter{
-    list-style-type: none;
-    margin: 0;
-    border: none;
-    padding: 0 18px 0 12px;
+#editor-box .editor{
+    display: none;
+    height: 100%;
+    font-family: monospace;
+    font-size: 15px;
+}
+#editor-box .editor.active{
+    display: block;
+}
+#editor-box .editor .counter{
     display: block;
     float: left;
-    min-width: 20px;
-    max-width: 50px;
-    background-color: #333;
+    margin: 0;
+    padding: 0 18px 0 12px;
+    min-width: 30px;
     height: 100%;
-    line-height: 1;
-    font-family: monospace;
+    background-color: #333;
 }
-ul#line-counter > li{
+#editor-box .editor .counter > li{
+    display: block;
+    padding: 0;
     width: 100%;
     color: #aaa;
     text-align: right;
 }
-#text-body{
-    display: block;
-    margin: 0;
-    border: none;
-    outline: none;
-    resize: none;
-    float: right;
-    width: auto;
-    padding: 0;
-    background-color: transparent;
-    color: #c5c5c5;
+#editor-box .editor .text{
+    float: left;
+    /* width: calc(100% - 60px); */
+    width: 100%;
     height: 100%;
+    background-color: #444444;
+    color: #c5c5c5;
 }
-
-.monofont{
-    line-height: 1;
-    font-family: monospace;
-    font-size: 16px;
-}
-
-
-
-

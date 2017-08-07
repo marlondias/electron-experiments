@@ -2,7 +2,7 @@
 
 const statusBar = document.getElementById('status-bar');
 const tabSelector = document.getElementById('tab-selector');
-const editor = document.getElementById('editor');
+const editor = document.getElementById('editor-box');
 const tabs = document.getElementById('tabs');
 
 let oldWidth = window.innerWidth;
@@ -39,7 +39,7 @@ function changeEditorHeight(){
     const editH = $(editor).outerHeight();
     const offset = tabsH + statH;
     if(winH-offset != editH){
-        editor.style.setProperty('min-height', (winH-offset) + 'px');
+        editor.style.setProperty('height', (winH-offset) + 'px');
     }
 }
 
