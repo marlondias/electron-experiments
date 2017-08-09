@@ -121,6 +121,7 @@ class TabManager{
         // Searches for the tab with ID and sets it as the only active tab in the <ul>.
         // If the ID is not found, the target will be 'undefined' and all tabs will be
         // disabled.
+        if(typeof id !== 'symbol' || !this.has(id)) return;
         const tab = this.find(id);
         for(let t of TabManager.all){
             if(t === tab) t.setActive(true);

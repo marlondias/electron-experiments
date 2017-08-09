@@ -43,16 +43,24 @@ let tabid = 1;
 window.addEventListener('newBlankTab', () => {
     // Check for how many files are open. If there are too many, cancel the operation.
     // Create a new Document, Tab and Editor. Make sure they are strongly related.
-    tm.create(Symbol(), `sample${tabid++}.txt`);
-    edm.newEditor();
+
+    const newID = Symbol();
+    tm.create(newID, `sample-${tabid++}.txt`);
+    edm.create(newID);
 });
 
 window.addEventListener('activateTab', (ev) => {
     console.log('TODO: Evento de ativação da aba!');
-    tm.setActive(ev.detail.id);
+
+    const target = ev.detail.id;
+    tm.setActive(target);
+    edm.setActive(target);
 });
 
 window.addEventListener('closeTab', (ev) => {
     console.log('TODO: Evento de fechamento!');
-    tm.remove(ev.detail.id);
+
+    const target = ev.detail.id;
+    tm.remove(target);
+    edm.remove(target);
 });
