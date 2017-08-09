@@ -23,7 +23,7 @@ class Editor{
         for(let i=1; i < 16; i++){
             //Placeholder
             const item = document.createElement('li');
-            item.innerText = i;            
+            item.innerText = i;
             lc.appendChild(item);
         }
         editor.appendChild(lc);
@@ -36,6 +36,7 @@ class Editor{
 
         return {
             "editor": editor,
+            /* "counter": lc, */
             "textArea": txtArea
         };
     }

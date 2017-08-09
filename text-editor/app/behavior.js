@@ -7,42 +7,52 @@ const editors = document.getElementById('editor-box');
 const tm = new TabManager(tabs);
 const edm = new EditorManager(editors);
 
-function arrowLeft(){
-    //Slides the tabs to the left until the "leftiest" tabs is fully visible
-}
-
-function arrowRight(tRow, tabsArray){
-    //Slides the tabs to the right until the "rightiest" tabs is fully visible
-
-    //Check if all tabs fit the area
-    //const rowWidth = $(tRow).width();
-    //const minWidth = getWidthOfTabs(tabsArray);
-    //if(rowWidth > minWidth) return;
-
-    //console.log('Make the DIV great again!');
-
-    //If there is a hidden tab in the right edge, slide the others to the left
-}
-
-
-
-let tabid = 1;
 
 //Bind events here...
 document.getElementById('btn-tabs-add').addEventListener('click', () => {
-    tm.newTab(`sample${tabid++}.txt`);
-    edm.newEditor();
+    const event = new CustomEvent('newBlankTab', {
+        detail: "nothing yet"
+    });
+    this.dispatchEvent(event);
 });
 
 document.getElementById('btn-tabs-left').addEventListener('click', () => {
-    console.log('TAB LEFT was clicked.');
+    const event = new CustomEvent('moveTabLeft', {
+        detail: "nothing yet"
+    });
+    this.dispatchEvent(event);
 });
 
 document.getElementById('btn-tabs-right').addEventListener('click', () => {
-    arrowRight(tabsRow, tabElements);
+    const event = new CustomEvent('moveTabRight', {
+        detail: "nothing yet"
+    });
+    this.dispatchEvent(event);
+});
+
+
+window.addEventListener('moveTabLeft', () => {
+    console.log('TAB LEFT was clicked.');
+});
+
+window.addEventListener('moveTabRight', () => {
     console.log('TAB RIGHT was clicked.');
 });
 
-window.addEventListener('customEv', (ev) => {
-    console.log('Custom event was triggered!' + ev);
+let tabid = 1;
+window.addEventListener('newBlankTab', () => {
+    // Check for how many files are open. If there are too many, cancel the operation.
+    // Create a new Document, Tab and Editor. Make sure they are strongly related.
+    tm.create(Symbol(), `sample${tabid++}.txt`);
+    edm.newEditor();
+});
+
+window.addEventListener('activateTab', (ev) => {
+    console.log('TODO: Evento de ativação da aba!');
+    tm.setActive(ev.detail.id);
+});
+
+window.addEventListener('closeTab', (ev) => {
+    console.log('TODO: Evento de fechamento!');
+    tm.remove(ev.detail.id);
 });

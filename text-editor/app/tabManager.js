@@ -1,13 +1,15 @@
 const nameCharLimit = 20; // The maximum lenght of a tab title
 
 class Tab{
-    constructor(name){
+    constructor(id, name){
+        this.id = id;
         this.active = false;
         this.html = this.createHTML(name); //will be an object with 4 props
     }
     
     setActive(state){
         // Sets this tab as active, changing the HTML class
+        if(this.state == !!state) return;
         this.active = !!state;
         if(this.active) $(this.html.tab).addClass('active');
         else $(this.html.tab).removeClass('active');
@@ -21,9 +23,12 @@ class Tab{
         if(nameStr != undefined && nameStr != '') tab.setAttribute('title', nameStr);
         tab.className = 'tab-box';
         tab.addEventListener('click', () => {
-            //chama o editor relacionado
-            console.log('TODO: Evento de ativação da aba!');
-            TabManager.setActive(self);
+            // Raises the event for focus
+            const event = new CustomEvent('activateTab', {
+                bubbles: true,
+                detail: { 'id': self.id }
+            });
+            self.html.tab.dispatchEvent(event);
         });
         tab.setAttribute('draggable', true);
         tab.addEventListener('dragstart', () => { /* start tab dragging */ });
@@ -48,9 +53,11 @@ class Tab{
         close.setAttribute('title', 'Close');
         close.addEventListener('click', (ev) => {
             ev.stopPropagation();
-            //start closing process
-            console.log('TODO: Evento de fechamento!');
-            self.destroyHTML();
+            const event = new CustomEvent('closeTab', {
+                bubbles: true,
+                detail: { 'id': self.id }
+            });
+            self.html.close.dispatchEvent(event);
         });
         tab.appendChild(close);
 
@@ -63,20 +70,18 @@ class Tab{
     }
 
     destroyHTML(){
-        // Removes <li> element for this tab
+        // Removes <li> element for this tab, and triggers some animation
         if(this.destroyed == undefined) this.destroyed = false;
         if(this.destroyed){
             console.error('Error: HTML for this tab was already removed.');
             return;
         }
         try{
-            const index = TabManager.allTabs.indexOf(this);
             const self = this;
             this.html.tab.addEventListener("webkitAnimationEnd", () => {
                 self.html.tab.parentNode.removeChild(self.html.tab);
                 self.html = undefined;
                 self.destroyed = true;
-                TabManager.allTabs.splice(index, 1);
             });
             this.html.tab.style.WebkitAnimation = 'closingtab 0.5s 1';
         } catch(e){
@@ -106,44 +111,86 @@ class Tab{
     }
 }
 
+
 class TabManager{
     constructor(parent){
         this.parentHTML = parent;
     }
 
-    static setActive(tab){
-        // Sets TAB as the only active tab in the <ul>
-        for(let t of TabManager.allTabs){
+    setActive(id){
+        // Searches for the tab with ID and sets it as the only active tab in the <ul>.
+        // If the ID is not found, the target will be 'undefined' and all tabs will be
+        // disabled.
+        const tab = this.find(id);
+        for(let t of TabManager.all){
             if(t === tab) t.setActive(true);
             else t.setActive(false);
         }
     }
 
-    newTab(name){
-        const t = new Tab(name);
+    find(id){
+        // Returns the desired Tab, or UNDEFINED.
+        if(typeof id === 'symbol'){
+            for(let t of TabManager.all){
+                if(t.id === id) return t;
+            }
+        }
+        return undefined;
+    }
 
-        // Creates a new Tab, adding its HTML to the container
-        if(TabManager.allTabs.length == 0) this.parentHTML.appendChild(t.html.tab);
-        else this.parentHTML.insertBefore(t.html.tab, TabManager.allTabs[0].html.tab);
-        TabManager.allTabs.unshift(t);
+    has(id){
+        // Checks if the ID is already in use, returns boolean.
+        if(typeof id === 'symbol'){
+            for(let t of TabManager.all){
+                if(t.id === id) return true;
+            }
+        }
+        return false;
+    }
 
+    create(id, name){
+        // Creates a new Tab and adds its HTML to the container
+        if(typeof id !== 'symbol') throw new Error('Error creating tab: Type of ID is not supported.');
+        if(this.has(id)) throw new Error('Error creating tab: ID is already registered.');
+        if(typeof name !== 'string') throw new Error('Error creating tab: Type of NAME is not supported.');
+
+        const t = new Tab(id, name);
+        if(TabManager.all.length == 0) this.parentHTML.appendChild(t.html.tab);
+        else this.parentHTML.insertBefore(t.html.tab, TabManager.all[0].html.tab);
+        TabManager.all.unshift(t);
+        
         this.expandWidth();
-        TabManager.setActive(t);
+        this.setActive(id);
         t.animationOpen();
     }
 
-    //TODO: event -> destroyTab(){}
+    remove(id){
+        // Removes the Tab object and its HTML, returns a boolean
+        if(typeof id === 'symbol' && this.has(id)){
+            try{
+                const t = this.find(id);
+                const index = TabManager.all.indexOf(t);
+                t.destroyHTML();
+                TabManager.all.splice(index, 1);
+                return true;
+            } catch(e){
+                console.error(e);
+                return false;
+            }
+        }
+        return false;        
+    }
 
     getWidthOfAllTabs(){
         let width = 0;
-        for(let t of TabManager.allTabs){
+        for(let t of TabManager.all){
             width += $(t.html.tab).outerWidth();
         }
         return width;
     }
 
     expandWidth(){
-        if(TabManager.allTabs.length == 0) return;
+        if(TabManager.all.length == 0) return;
         const parentWidth = $(this.parentHTML).outerWidth();
         let minWidth = this.getWidthOfAllTabs();
 
@@ -153,9 +200,26 @@ class TabManager{
             this.parentHTML.style.width = minWidth + 'px';
         }
     }
-
 }
-TabManager.allTabs = [];
+TabManager.all = [];
 
 
 module.exports = TabManager;
+
+
+function arrowLeft(){
+    //Slides the tabs to the left until the "leftiest" tabs is fully visible
+}
+
+function arrowRight(tRow, tabsArray){
+    //Slides the tabs to the right until the "rightiest" tabs is fully visible
+
+    //Check if all tabs fit the area
+    //const rowWidth = $(tRow).width();
+    //const minWidth = getWidthOfTabs(tabsArray);
+    //if(rowWidth > minWidth) return;
+
+    //console.log('Make the DIV great again!');
+
+    //If there is a hidden tab in the right edge, slide the others to the left
+}
