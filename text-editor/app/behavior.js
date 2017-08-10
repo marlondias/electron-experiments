@@ -1,11 +1,9 @@
-const TabManager = require('./tabManager.js');
-const EditorManager = require('./editorManager.js');
+const DocumentManager = require('./documentManager.js');
 
 const tabsRow = document.getElementById('tabs-row');
 const tabs = document.getElementById('tabs');
 const editors = document.getElementById('editor-box');
-const tm = new TabManager(tabs);
-const edm = new EditorManager(editors);
+const docMan = new DocumentManager(tabs, editors);
 
 
 //Bind events here...
@@ -43,24 +41,18 @@ let tabid = 1;
 window.addEventListener('newBlankTab', () => {
     // Check for how many files are open. If there are too many, cancel the operation.
     // Create a new Document, Tab and Editor. Make sure they are strongly related.
-
-    const newID = Symbol();
-    tm.create(newID, `sample-${tabid++}.txt`);
-    edm.create(newID);
+    console.log('EVENTO: Nova aba em branco.');
+    docMan.createBlank();
 });
 
 window.addEventListener('activateTab', (ev) => {
-    console.log('TODO: Evento de ativação da aba!');
-
+    console.log('EVENTO: Ativação de aba.');
     const target = ev.detail.id;
-    tm.setActive(target);
-    edm.setActive(target);
+    docMan.setActive(target);
 });
 
 window.addEventListener('closeTab', (ev) => {
-    console.log('TODO: Evento de fechamento!');
-
+    console.log('EVENTO: Fechamento de aba.');
     const target = ev.detail.id;
-    tm.remove(target);
-    edm.remove(target);
+    docMan.close(target);
 });

@@ -153,7 +153,7 @@ class TabManager{
         // Creates a new Tab and adds its HTML to the container
         if(typeof id !== 'symbol') throw new Error('Error creating tab: Type of ID is not supported.');
         if(this.has(id)) throw new Error('Error creating tab: ID is already registered.');
-        if(typeof name !== 'string') throw new Error('Error creating tab: Type of NAME is not supported.');
+        if(name !== undefined && typeof name !== 'string') throw new Error('Error creating tab: Type of NAME is not supported.');
 
         const t = new Tab(id, name);
         if(TabManager.all.length == 0) this.parentHTML.appendChild(t.html.tab);
