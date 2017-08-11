@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, Menu} = require('electron');
 const path = require('path');
 const url = require('url');
 
@@ -17,6 +17,136 @@ function createWindow(){
         protocol: 'file:',
         slashes: true
     }));
+
+    const template = [
+        {
+            label: 'File',
+            submenu: [
+                {
+                    type: 'normal',
+                    label: 'New File',
+                    accelerator: 'CmdOrCtrl+N'
+                },
+                {
+                    type: 'normal',
+                    label: 'Open File...'
+                },
+                {
+                    type: 'normal',
+                    label: 'Save',
+                    accelerator: 'CmdOrCtrl+S'
+                },
+                {
+                    type: 'normal',
+                    label: 'Save As...',
+                    accelerator: 'CmdOrCtrl+Shift+S'
+                },
+                {
+                    type: 'normal',
+                    label: 'Revert File'
+                },
+                {
+                    type: 'normal',
+                    label: 'Close File',
+                    accelerator: 'CmdOrCtrl+W'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    type: 'normal',
+                    label: 'Close Editor',
+                    accelerator: 'CmdOrCtrl+Q'
+                },
+            ]
+        },
+        {
+            label: 'Edit',
+            submenu: [
+                {
+                    role: 'undo'
+                },
+                {
+                    role: 'redo'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    role: 'cut'
+                },
+                {
+                    role: 'copy'
+                },
+                {
+                    role: 'paste'
+                },
+                {
+                    role: 'selectall'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    type: 'normal',
+                    label: 'Find...',
+                    accelerator: 'CmdOrCtrl+F'
+                },
+                {
+                    type: 'normal',
+                    label: 'Find and Replace...',
+                    accelerator: 'CmdOrCtrl+H'
+                },
+            ]
+        },
+        {
+            label: 'Format',
+            submenu: [
+                {
+                    type: 'checkbox',
+                    label: 'Word Wrap'
+                },
+                {
+                    type: 'submenu',
+                    label: 'Encoding',
+                    submenu: [
+                        { label: 'ASCII' },
+                        { label: 'UTF-8' },
+                        { label: 'UTF-16' },
+                    ]
+                },
+                {
+                    type: 'submenu',
+                    label: 'Line Ending',
+                    submenu: [
+                        { label: 'Windows' },
+                        { label: 'Linux' },
+                        { label: 'MacOS' },
+                    ]
+                }
+            ]
+        },
+        {
+            label: 'Extras',
+            submenu: [
+                {
+                    type: 'submenu',
+                    label: 'Themes',
+                    submenu: [
+                        { label: 'Light' },
+                        { label: 'Dark' },
+                        { label: 'H4ck3r' },
+                    ]
+                },
+                {
+                    type: 'normal',
+                    label: 'About'
+                }
+            ]
+        },
+    ];
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
     win.on('closed', () => {
         //dereference any unused window objects

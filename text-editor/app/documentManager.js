@@ -53,8 +53,10 @@ class DocManager{
     }
 
     setActive(id){
+        if(typeof id !== 'symbol' || !this.allDocs.has(id)) 
+            throw new Error('Unable to close document: Invalid ID.');
         this.tabMngr.setActive(id);
-        this.editorMngr.setActive(id);        
+        this.editorMngr.setActive(id);
     }
 
     open(filepath){
