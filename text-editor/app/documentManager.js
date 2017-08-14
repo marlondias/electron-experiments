@@ -1,6 +1,7 @@
 const {dialog} = require('electron').remote;
 const TabManager = require('./tabManager.js');
 const EditorManager = require('./editorManager.js');
+const ps = require('electron').remote.require('electron-pubsub');
 
 class Document{
     constructor(file){
@@ -34,46 +35,57 @@ class Document{
 let tabid = 1;
 
 class DocManager{
-    constructor(tabContainer, editorContainer){
+    static initHTML(tabContainer, editorContainer){
         if(!(tabContainer instanceof HTMLElement) || !(editorContainer instanceof HTMLElement)){
             throw new Error('Error initializing: Arguments must be of type HTMLElement.');
         }
-        this.tabMngr = new TabManager(tabContainer);
-        this.editorMngr = new EditorManager(editorContainer);
-        this.allDocs = new Map(); // change to static?
+        DocManager.tabMngr = new TabManager(tabContainer);
+        DocManager.editorMngr = new EditorManager(editorContainer);
     }
 
-    createBlank(){
+    static createBlank(){
+        if(DocManager.tabMngr == undefined || DocManager.editorMngr == undefined) 
+            throw new Error('Unable to create document: HTML containers must be defined first.');
+
         // Creates a new Document, an unnamed Tab and an empty Editor.
         const doc = new Document();
         const fakeName = `sample-${tabid++}.txt`;
-        this.tabMngr.create(doc.id, fakeName);
-        this.editorMngr.create(doc.id);
-        this.allDocs.set(doc.id, doc);
+        DocManager.tabMngr.create(doc.id, fakeName);
+        DocManager.editorMngr.create(doc.id);
+        DocManager.allDocs.set(doc.id, doc);
     }
 
-    setActive(id){
-        if(typeof id !== 'symbol' || !this.allDocs.has(id)) 
+    static setActive(id){
+        if(DocManager.tabMngr == undefined || DocManager.editorMngr == undefined) 
+            throw new Error('Unable to create document: HTML containers must be defined first.');
+
+        if(typeof id !== 'symbol' || !DocManager.allDocs.has(id)) 
             throw new Error('Unable to close document: Invalid ID.');
-        this.tabMngr.setActive(id);
-        this.editorMngr.setActive(id);
+
+        DocManager.tabMngr.setActive(id);
+        DocManager.editorMngr.setActive(id);
     }
 
-    open(filepath){
+    static open(filepath){
+        if(DocManager.tabMngr == undefined || DocManager.editorMngr == undefined) 
+            throw new Error('Unable to create document: HTML containers must be defined first.');
+
         // Tries to open a file and returns a new Document instance.
     }
 
-    close(id){
-        if(typeof id !== 'symbol' || !this.allDocs.has(id)) 
+    static close(id){
+        if(DocManager.tabMngr == undefined || DocManager.editorMngr == undefined) 
+            throw new Error('Unable to create document: HTML containers must be defined first.');
+
+        if(typeof id !== 'symbol' || !DocManager.allDocs.has(id)) 
             throw new Error('Unable to close document: Invalid ID.');
 
-        const target = this.allDocs.get(id);
-        const self = this;
+        const target = DocManager.allDocs.get(id);
         function closeDoc(){
             // Close, remove and destroy
-            self.tabMngr.remove(id);
-            self.editorMngr.remove(id);
-            self.allDocs.delete(id);
+            DocManager.tabMngr.remove(id);
+            DocManager.editorMngr.remove(id);
+            DocManager.allDocs.delete(id);
         }
         if(!target.modified){
             closeDoc();
@@ -127,10 +139,58 @@ class DocManager{
             );
         }
     }
-
 }
+DocManager.allDocs = new Map();
 
 module.exports = DocManager;
+
+/*
+newFile
+openFile
+saveFile
+saveFileAs
+revertFile
+closeFile
+
+closeEditor
+showAbout
+slideTabs (direction)
+focusTab (id)
+*/
+
+ps.subscribe('newFile', (ev, info) => {
+    // Create a new Document, Tab and Editor. Make sure they are strongly related.
+    console.log('EVENTO: Novo documento. Origem: ' + info.origin);
+    DocManager.createBlank();
+});
+
+ps.subscribe('openFile', (ev, info) => {});
+ps.subscribe('saveFile', (ev, info) => {});
+ps.subscribe('saveFileAs', (ev, info) => {});
+ps.subscribe('revertFile', (ev, info) => {});
+
+ps.subscribe('closeFile', (ev, info) => {
+    // Tries to close the Document, warning if there are unsaved changes.
+    // If the event does not have an ID, the currently active document will be closed.
+    console.log('EVENTO: Fechamento de aba. Origem: ' + info.origin);
+
+    if(!info.hasOwnProperty('docID') || info.docID == undefined){
+        console.log('Sem ID. Fechar ativo.');
+    }
+    else{
+        console.log(info.docID);
+    }
+});
+
+
+ps.subscribe('focusTab', (ev, info) => {
+    // Sets the active document (editor and tab). Only works with an ID.
+    console.log('EVENTO: Ativação de aba. Origem: ' + info.origin);
+
+    if(!info.hasOwnProperty('docID') || info.docID == undefined) return;
+    DocManager.setActive(info.docID);
+});
+
 
 // TODO: TabManager and EditorManager can be replaced by references in a Document instance,
 // but it'll have to handle tab positioning.

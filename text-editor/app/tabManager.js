@@ -1,3 +1,4 @@
+const ps = require('electron').remote.require('electron-pubsub');
 const nameCharLimit = 20; // The maximum lenght of a tab title
 
 class Tab{
@@ -24,11 +25,10 @@ class Tab{
         tab.className = 'tab-box';
         tab.addEventListener('click', () => {
             // Raises the event for focus
-            const event = new CustomEvent('activateTab', {
-                bubbles: true,
-                detail: { 'id': self.id }
+            ps.publish('focusTab', {
+                origin: 'tab',
+                docID: self.id
             });
-            self.html.tab.dispatchEvent(event);
         });
         tab.setAttribute('draggable', true);
         tab.addEventListener('dragstart', () => { /* start tab dragging */ });
@@ -53,11 +53,11 @@ class Tab{
         close.setAttribute('title', 'Close');
         close.addEventListener('click', (ev) => {
             ev.stopPropagation();
-            const event = new CustomEvent('closeTab', {
-                bubbles: true,
-                detail: { 'id': self.id }
+            console.log(self.id);
+            ps.publish('closeFile', {
+                origin: 'closeTabButton',
+                docID: self.id
             });
-            self.html.close.dispatchEvent(event);
         });
         tab.appendChild(close);
 

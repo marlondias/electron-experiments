@@ -9,8 +9,8 @@ function createWindow(){
     win = new BrowserWindow({
         minWidth: 300,
         minHeight: 200,
-        width: 1000,
-        height: 600
+        width: 600,
+        height: 500
     });
 
     win.loadURL(url.format({
@@ -26,6 +26,7 @@ function createWindow(){
         //dereference any unused window objects
         win = null;
     });
+
 }
 
 app.on('ready', createWindow);

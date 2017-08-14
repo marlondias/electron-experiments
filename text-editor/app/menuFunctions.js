@@ -1,5 +1,5 @@
 const {Menu, MenuItem} = require('electron');
-const eventSystem = require('./pubSub.js');
+const ps = require('electron-pubsub');
 
 const saveF = new MenuItem({
     type: 'normal',
@@ -7,7 +7,7 @@ const saveF = new MenuItem({
     accelerator: 'CmdOrCtrl+S',
     enabled: false,
     click: () => {
-        eventSystem.publish('saveFile', {
+        ps.publish('saveFile', {
             origin: 'mainmenu'
         });
     }
@@ -19,7 +19,7 @@ const saveAsF = new MenuItem({
     accelerator: 'CmdOrCtrl+Shift+S',
     enabled: false,
     click: () => {
-        eventSystem.publish('saveFileAs', {
+        ps.publish('saveFileAs', {
             origin: 'mainmenu'
         });
     }
@@ -30,7 +30,7 @@ const revertF = new MenuItem({
     label: 'Revert File',
     enabled: false,
     click: () => {
-        eventSystem.publish('revertFile', {
+        ps.publish('revertFile', {
             origin: 'mainmenu'
         });
     }
@@ -41,13 +41,12 @@ const closeF = new MenuItem({
     label: 'Close File',
     accelerator: 'CmdOrCtrl+W',
     enabled: false,
-    click: (mItem, bWindow, ev) => {
-        eventSystem.publish('closeFile', {
+    click: () => {
+        ps.publish('closeFile', {
             origin: 'mainmenu'
         });
     }
 });
-
 
 const editMenu = new MenuItem({
     label: 'Edit',
@@ -95,7 +94,7 @@ const editMenu = new MenuItem({
             accelerator: 'CmdOrCtrl+H',
             enabled: false
         },
-    ],
+    ]
 });
 
 const formatMenu = new MenuItem({
@@ -154,7 +153,7 @@ const template = [
                 label: 'New File',
                 accelerator: 'CmdOrCtrl+N',
                 click: () => {
-                    eventSystem.publish('newFile', {
+                    ps.publish('newFile', {
                         origin: 'mainmenu'
                     });
                 }
@@ -164,7 +163,7 @@ const template = [
                 label: 'Open File...',
                 accelerator: 'CmdOrCtrl+O',
                 click: () => {
-                    eventSystem.publish('openFile', {
+                    ps.publish('openFile', {
                         origin: 'mainmenu'
                     });
                 }
@@ -181,7 +180,7 @@ const template = [
                 label: 'Close Editor',
                 accelerator: 'CmdOrCtrl+Q',
                 click: () => {
-                    eventSystem.publish('closeEditor', {
+                    ps.publish('closeEditor', {
                         origin: 'mainmenu'
                     });
                 }
@@ -206,7 +205,7 @@ const template = [
                 type: 'normal',
                 label: 'About',
                 click: () => {
-                    eventSystem.publish('showAbout', {
+                    ps.publish('showAbout', {
                         origin: 'mainmenu'
                     });
                 }
