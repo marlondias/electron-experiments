@@ -13,7 +13,6 @@
   "author": "Marlon Dias",
   "license": "ISC",
   "dependencies": {
-    "electron": "^1.6.11",
-    "electron-pubsub": "^0.2.2"
+    "electron": "^1.6.11"
   }
 }

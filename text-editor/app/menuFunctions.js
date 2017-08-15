@@ -1,5 +1,5 @@
 const {Menu, MenuItem} = require('electron');
-const ps = require('electron-pubsub');
+const eventEmitter = require('electron').ipcMain;
 
 const saveF = new MenuItem({
     type: 'normal',
@@ -7,7 +7,7 @@ const saveF = new MenuItem({
     accelerator: 'CmdOrCtrl+S',
     enabled: false,
     click: () => {
-        ps.publish('saveFile', {
+        eventEmitter.emit('saveFile', {
             origin: 'mainmenu'
         });
     }
@@ -19,7 +19,7 @@ const saveAsF = new MenuItem({
     accelerator: 'CmdOrCtrl+Shift+S',
     enabled: false,
     click: () => {
-        ps.publish('saveFileAs', {
+        eventEmitter.emit('saveFileAs', {
             origin: 'mainmenu'
         });
     }
@@ -30,7 +30,7 @@ const revertF = new MenuItem({
     label: 'Revert File',
     enabled: false,
     click: () => {
-        ps.publish('revertFile', {
+        eventEmitter.emit('revertFile', {
             origin: 'mainmenu'
         });
     }
@@ -42,7 +42,7 @@ const closeF = new MenuItem({
     accelerator: 'CmdOrCtrl+W',
     enabled: false,
     click: () => {
-        ps.publish('closeFile', {
+        eventEmitter.emit('closeFile', {
             origin: 'mainmenu'
         });
     }
@@ -153,7 +153,7 @@ const template = [
                 label: 'New File',
                 accelerator: 'CmdOrCtrl+N',
                 click: () => {
-                    ps.publish('newFile', {
+                    eventEmitter.emit('newFile', {
                         origin: 'mainmenu'
                     });
                 }
@@ -163,7 +163,7 @@ const template = [
                 label: 'Open File...',
                 accelerator: 'CmdOrCtrl+O',
                 click: () => {
-                    ps.publish('openFile', {
+                    eventEmitter.emit('openFile', {
                         origin: 'mainmenu'
                     });
                 }
@@ -180,7 +180,7 @@ const template = [
                 label: 'Close Editor',
                 accelerator: 'CmdOrCtrl+Q',
                 click: () => {
-                    ps.publish('closeEditor', {
+                    eventEmitter.emit('closeEditor', {
                         origin: 'mainmenu'
                     });
                 }
@@ -205,7 +205,7 @@ const template = [
                 type: 'normal',
                 label: 'About',
                 click: () => {
-                    ps.publish('showAbout', {
+                    eventEmitter.emit('showAbout', {
                         origin: 'mainmenu'
                     });
                 }

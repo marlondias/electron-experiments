@@ -1,4 +1,4 @@
-const ps = require('electron').remote.require('electron-pubsub');
+const eventEmitter = require('electron').ipcRenderer;
 const nameCharLimit = 20; // The maximum lenght of a tab title
 
 class Tab{
@@ -25,7 +25,7 @@ class Tab{
         tab.className = 'tab-box';
         tab.addEventListener('click', () => {
             // Raises the event for focus
-            ps.publish('focusTab', {
+            eventEmitter.emit('focusTab', {
                 origin: 'tab',
                 docID: self.id
             });
@@ -53,8 +53,7 @@ class Tab{
         close.setAttribute('title', 'Close');
         close.addEventListener('click', (ev) => {
             ev.stopPropagation();
-            console.log(self.id);
-            ps.publish('closeFile', {
+            eventEmitter.emit('closeFile', {
                 origin: 'closeTabButton',
                 docID: self.id
             });
