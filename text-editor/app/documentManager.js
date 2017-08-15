@@ -1,8 +1,7 @@
 const {dialog} = require('electron').remote;
-const eventEmitter = require('electron').ipcRenderer;
+const ipc = require('electron').ipcRenderer;
 const TabManager = require('./tabManager.js');
 const EditorManager = require('./editorManager.js');
-//const ps = require('electron').remote.require('electron-pubsub');
 
 class Document{
     constructor(file){
@@ -33,7 +32,7 @@ class Document{
     close(){}
 }
 
-let tabid = 1;
+let tabid = 1; //only for tests
 
 class DocManager{
     static initHTML(tabContainer, editorContainer){
@@ -159,18 +158,18 @@ slideTabs (direction)
 focusTab (id)
 */
 
-eventEmitter.on('newFile', (info) => {
+ipc.on('newFile', (info) => {
     // Create a new Document, Tab and Editor. Make sure they are strongly related.
     console.log('EVENTO: Novo documento. Origem: ' + info.origin);
     DocManager.createBlank();
 });
 
-eventEmitter.on('openFile', (info) => {});
-eventEmitter.on('saveFile', (info) => {});
-eventEmitter.on('saveFileAs', (info) => {});
-eventEmitter.on('revertFile', (info) => {});
+ipc.on('openFile', (info) => {});
+ipc.on('saveFile', (info) => {});
+ipc.on('saveFileAs', (info) => {});
+ipc.on('revertFile', (info) => {});
 
-eventEmitter.on('closeFile', (info) => {
+ipc.on('closeFile', (info) => {
     // Tries to close the Document, warning if there are unsaved changes.
     // If the event does not have an ID, the currently active document will be closed.
     console.log('EVENTO: Fechamento de aba. Origem: ' + info.origin);
@@ -183,7 +182,7 @@ eventEmitter.on('closeFile', (info) => {
     }
 });
 
-eventEmitter.on('focusTab', (info) => {
+ipc.on('focusTab', (info) => {
     // Sets the active document (editor and tab). Only works with an ID.
     console.log('EVENTO: Ativação de aba. Origem: ' + info.origin);
 

@@ -60,8 +60,7 @@ class Editor{
     }
 }
 
-
-class EditorManager{
+export class EditorManager{
     constructor(parent){
         this.parentHTML = parent;
     }
@@ -126,6 +125,3 @@ class EditorManager{
     }
 }
 EditorManager.all = [];
-
-
-module.exports = EditorManager;

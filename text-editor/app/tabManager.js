@@ -1,11 +1,11 @@
-const eventEmitter = require('electron').ipcRenderer;
+const ipc = require('electron').ipcRenderer;
 const nameCharLimit = 20; // The maximum lenght of a tab title
 
 class Tab{
     constructor(id, name){
         this.id = id;
         this.active = false;
-        this.html = this.createHTML(name); //will be an object with 4 props
+        this.html = this.createHTML(name); //an object with 4 props
     }
     
     setActive(state){
@@ -25,7 +25,7 @@ class Tab{
         tab.className = 'tab-box';
         tab.addEventListener('click', () => {
             // Raises the event for focus
-            eventEmitter.emit('focusTab', {
+            ipc.emit('focusTab', {
                 origin: 'tab',
                 docID: self.id
             });
@@ -53,7 +53,7 @@ class Tab{
         close.setAttribute('title', 'Close');
         close.addEventListener('click', (ev) => {
             ev.stopPropagation();
-            eventEmitter.emit('closeFile', {
+            ipc.emit('closeFile', {
                 origin: 'closeTabButton',
                 docID: self.id
             });
@@ -110,8 +110,7 @@ class Tab{
     }
 }
 
-
-class TabManager{
+export class TabManager{
     constructor(parent){
         this.parentHTML = parent;
     }
@@ -203,9 +202,10 @@ class TabManager{
 }
 TabManager.all = [];
 
-
-module.exports = TabManager;
-
+ipc.on('slideTabs', (info) => {
+    //Placeholder listener
+    console.log(`Button slide ${info.direction} was clicked.`);
+});
 
 function arrowLeft(){
     //Slides the tabs to the left until the "leftiest" tabs is fully visible
